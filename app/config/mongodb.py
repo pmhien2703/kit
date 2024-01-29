@@ -7,7 +7,7 @@ uri = "mongodb+srv://admin:admin123@cluster0.sizb9bz.mongodb.net/?retryWrites=tr
 client = MongoClient(uri, server_api=ServerApi('1'))
 
 # Create mongodb
-db = client.kit_db
+db = client.kit
 
 def mongo_test_connection(): 
     # Send a ping to confirm a successful connection

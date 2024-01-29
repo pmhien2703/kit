@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from bson.objectid import ObjectId
 from mongoengine import Document, StringField, EmailField
 
 class UserModel(BaseModel):
-    username: str
-    password: str
-    fullname: str
-    email: str
-    avatar: str
+    username: str = None | None
+    password: str = None | None
+    fullname: str = None | None
+    email: EmailStr
+    avatar: str = None | None
