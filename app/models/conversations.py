@@ -8,3 +8,4 @@ class ConversationModel(BaseModel):
     group_admin: ObjectId | None
     channel_name: str
     latest_message: ObjectId
+    

@@ -1,3 +1,3 @@
 from fastapi import APIRouter
 
-usersRouter = APIRouter()
+messages_router = APIRouter()
