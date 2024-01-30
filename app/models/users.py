@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from bson.objectid import ObjectId
-from mongoengine import Document, StringField, EmailField
+from bson import ObjectId
 
 class UserModel(BaseModel):
     username: str = None | None
