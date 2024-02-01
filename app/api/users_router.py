@@ -4,14 +4,14 @@ from config.mongodb import users_collection
 from models.users import UserModel
 from bson import ObjectId
 
-user_router = APIRouter()
+user_router = APIRouter(prefix="/api/v1/user", tags=["User"])
 
-@user_router.get("/users")
+@user_router.get("/")
 async def get_users():
     users = users_collection.find()
     return list_users(users)
 
-@user_router.post("/user")
+@user_router.post("/")
 async def create_user(user: UserModel):
     check_user = users_collection.find_one({"email": user.email})
     if check_user:
@@ -21,7 +21,7 @@ async def create_user(user: UserModel):
     result = users_collection.find_one({"_id": new_user.inserted_id})
     return individual_user(result)
 
-@user_router.put("/user/{id}")
+@user_router.put("/{id}")
 async def update_user(id: str, user: UserModel):
     updated_user = users_collection.find_one_and_update({"_id": ObjectId(id)}, {"$set": dict(user)})
     return {"message": "Update success", "updated_user": individual_user(updated_user)}

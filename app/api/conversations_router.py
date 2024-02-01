@@ -1,15 +1,11 @@
 from fastapi import APIRouter
 from models.conversations import ConversationModel
-from motor.motor_asyncio import AsyncIOMotorClient
 from config.mongodb import conversations_collection
 from utils.conversations_serialize import individual_conversation
 from bson.objectid import ObjectId
 
-client = AsyncIOMotorClient("mongodb+srv://admin:admin123@cluster0.sizb9bz.mongodb.net/?retryWrites=true&w=majority")  # Replace with your MongoDB URI
-db = client["kit"]  # Replace with your database name
-
-conversations_router = APIRouter()
-@conversations_router.post("/conversation")
+conversations_router = APIRouter(prefix="/api/v1/conversation", tags=["Conversation"])
+@conversations_router.post("/")
 async def create_conversation(conversation: ConversationModel):
     conversation = conversations_collection.insert_one(
         {
@@ -22,7 +18,7 @@ async def create_conversation(conversation: ConversationModel):
     )
     return {"message": "create new conversation successful"}
 
-@conversations_router.get("/conversations/{id}")
+@conversations_router.get("/{id}")
 async def get_conversation(id: str):
     aggregation = [
         {"$match": {"_id": ObjectId(id)}},
@@ -41,5 +37,5 @@ async def get_conversation(id: str):
         {"$unwind": "$group_admin"},  # Flatten the adminGroup array
         {"$project": {"_id": 1, "is_channel":1, "channel_name":1, "latest_message":1, "users": 1, "group_admin": 1}}  # Include only relevant fields
     ]
-    conversation = dict(conversations_collection.aggregate(aggregation))
+    conversation = list(conversations_collection.aggregate(aggregation))
     return individual_conversation(conversation[0])
