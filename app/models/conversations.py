@@ -1,9 +1,11 @@
 from pydantic import BaseModel
 from bson import ObjectId
+from typing import List, Optional
 
 class ConversationModel(BaseModel):
     is_channel: bool = False 
-    users: list[ObjectId] # DM only have 2 users, Group chat > 2 users
-    group_admin: ObjectId | None
+    users: List[str]
+    group_admin: Optional[str] = None
     channel_name: str
-    latest_message: ObjectId
+    latest_message: str
+

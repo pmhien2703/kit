@@ -2,8 +2,8 @@ from pydantic import BaseModel, EmailStr
 from bson import ObjectId
 
 class UserModel(BaseModel):
-    username: str = None | None
-    password: str = None | None
-    fullname: str = None | None
+    username: str = None
+    password: str = None
+    fullname: str = None
     email: EmailStr
-    avatar: str = None | None
+    avatar: str = None
