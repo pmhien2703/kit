@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 conversations_router = APIRouter(prefix="/api/v1/conversation", tags=["Conversation"])
 @conversations_router.post("/")
 async def create_conversation(conversation: ConversationModel):
-    conversation = conversations_collection.insert_one(
+    conversation = await conversations_collection.insert_one(
         {
             "is_channel": conversation.is_channel,
             "users": [ObjectId(user_id) for user_id in conversation.users],
@@ -37,5 +37,6 @@ async def get_conversation(id: str):
         {"$unwind": "$group_admin"},  # Flatten the adminGroup array
         {"$project": {"_id": 1, "is_channel":1, "channel_name":1, "latest_message":1, "users": 1, "group_admin": 1}}  # Include only relevant fields
     ]
-    conversation = list(conversations_collection.aggregate(aggregation))
+    cursor = conversations_collection.aggregate(aggregation)
+    conversation = await cursor.to_list(None)
     return individual_conversation(conversation[0])
