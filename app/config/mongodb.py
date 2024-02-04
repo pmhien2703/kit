@@ -1,13 +1,9 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from dotenv import load_dotenv
-import os
+from config.settings import Settings
 
-load_dotenv()
-# replace the admin and <password> you have create before connect
-uri = os.getenv("MONGODB_CONNECT_STRING") 
-print(uri)
-uri = "mongodb+srv://admin:admin123@cluster0.sizb9bz.mongodb.net/?retryWrites=true&w=majority"
+settings = Settings()
+uri = settings.MONGODB_CONNECT_STRING
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
 # Create mongodb
