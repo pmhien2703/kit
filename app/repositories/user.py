@@ -1,15 +1,14 @@
-from typing import Annotated
 from fastapi import Depends
 from config.mongodb import get_db
 from models.users import UserModel
 from .base import BaseRepository
 from bson import ObjectId
-from motor.motor_asyncio import AsyncIOMotorDatabase
 from utils.users_serialize import individual_user, list_users
 
+
 class UserRepository(BaseRepository):
-    def __init__(self, db: Annotated[AsyncIOMotorDatabase,Depends(get_db)]) -> None:
-        self.users_collection = db["users"]
+    def __init__(self, users_collection) -> None:
+        self.users_collection = users_collection
 
     async def get_by_id(self, id: str) -> dict:
         return individual_user(await self.users_collection.find_one({"_id": ObjectId(id)}))

@@ -1,31 +1,31 @@
 from http import HTTPStatus
 from fastapi import APIRouter, Depends
+from repositories.repository_manger import RepositoryManager
 from models.users import UserModel
-from repositories.user import UserRepository
 
 user_router = APIRouter(prefix="/api/v1/user", tags=["User"])
 
 @user_router.get("/{id}")
-async def get_user(id: str, user_repo: UserRepository = Depends()) -> dict:
-    users = await user_repo.get_by_id(id)
-    return users
+async def get_user(id: str, repos_manager: RepositoryManager = Depends()) -> dict:
+    user = await repos_manager.user.get_by_id(id)
+    return user
 
 @user_router.get("/")
-async def get_users(user_repo: UserRepository = Depends()) -> list[UserModel]:
-    users = await user_repo.get_all()
+async def get_users(repos_manager: RepositoryManager = Depends()) -> list[UserModel]:
+    users = await repos_manager.user.get_all()
     return users
 
 @user_router.post("/")
-async def create_user(user: UserModel, user_repo: UserRepository = Depends()):
-    await user_repo.create(dict(user))
+async def create_user(user: UserModel, repos_manager: RepositoryManager = Depends()):
+    await repos_manager.user.create(dict(user))
     return HTTPStatus.NO_CONTENT
 
 @user_router.put("/{id}")
-async def update_user(id: str, user: UserModel, user_repo: UserRepository = Depends()):
-    await user_repo.update(id, user)
+async def update_user(id: str, user: UserModel, repos_manager: RepositoryManager = Depends()):
+    await repos_manager.user.update(id, user)
     return HTTPStatus.NO_CONTENT
 
 @user_router.delete("/{id}")
-async def update_user(id: str, user_repo: UserRepository = Depends()):
-    await user_repo.remove(id)
+async def update_user(id: str, repos_manager: RepositoryManager = Depends()):
+    await repos_manager.user.remove(id)
     return HTTPStatus.NO_CONTENT
