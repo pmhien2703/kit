@@ -1,6 +1,6 @@
 from http import HTTPStatus
 from fastapi import APIRouter, Depends
-from repositories.repository_manger import RepositoryManager
+from app.repositories.manger import RepositoryManager
 from models.users import UserModel
 
 user_router = APIRouter(prefix="/api/v1/user", tags=["User"])
