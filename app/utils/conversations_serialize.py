@@ -1,4 +1,4 @@
-from utils.users_serialize import individual_user, list_users
+from app.utils.users_serialize import individual_user, list_users
 
 def individual_conversation(conversation) -> dict:
   return {
