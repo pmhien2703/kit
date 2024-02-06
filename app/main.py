@@ -1,8 +1,8 @@
 from typing import Union
 from fastapi import FastAPI
-from api.users_router import user_router
-from api.conversations_router import conversations_router
-from api.messages_router import messages_router
+from app.api.users_router import user_router
+from app.api.conversations_router import conversations_router
+from app.api.messages_router import messages_router
 
 app = FastAPI()
 app.include_router(user_router)

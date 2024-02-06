@@ -1,4 +1,4 @@
-from models.users import UserModel
+from app.models.users import UserModel
 
 def individual_user(user) -> dict:
   return {

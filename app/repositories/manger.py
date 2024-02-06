@@ -1,8 +1,8 @@
 from typing import Annotated
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from fastapi import Depends
-from config.mongodb import get_db
-from repositories.user import UserRepository
+from app.config.mongodb import get_db
+from app.repositories.user import UserRepository
 
 
 class RepositoryManager:

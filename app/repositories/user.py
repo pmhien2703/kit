@@ -1,9 +1,9 @@
 from fastapi import Depends
-from config.mongodb import get_db
-from models.users import UserModel
 from .base import BaseRepository
 from bson import ObjectId
-from utils.users_serialize import individual_user, list_users
+from app.utils.users_serialize import individual_user, list_users
+from app.config.mongodb import get_db
+from app.models.users import UserModel
 
 
 class UserRepository(BaseRepository):
