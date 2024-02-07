@@ -1,7 +1,4 @@
 from fastapi import APIRouter
-from bson.objectid import ObjectId
-from app.models.conversations import ConversationModel
-from app.utils.conversations_serialize import individual_conversation
 
 conversations_router = APIRouter(prefix="/api/v1/conversation", tags=["Conversation"])
 # @conversations_router.post("/")

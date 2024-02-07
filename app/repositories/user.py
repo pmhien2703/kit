@@ -1,10 +1,7 @@
-from fastapi import Depends
+from app.utils.serialize import serialize_dict, serialize_list
 from .base import BaseRepository
 from bson import ObjectId
-from app.utils.users_serialize import individual_user, list_users
-from app.config.mongodb import get_db
 from app.models.users import UserModel
-
 
 class UserRepository(BaseRepository):
     def __init__(self, users_collection) -> None:
