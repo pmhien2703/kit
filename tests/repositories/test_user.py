@@ -26,7 +26,7 @@ app.dependency_overrides[get_db] = override_get_db
 @pytest.fixture(scope="module")
 async def setup_one_user():
     client = AsyncIOMotorClient(uri)
-    db = client["kit_test"]
+    db = client[settings.TEST_DATABASE_NAME]
     collection = db["users"]
 
     #Arrange
@@ -36,7 +36,7 @@ async def setup_one_user():
     try:
        yield (collection, result.inserted_id)
     finally:
-       await client.drop_database("kit_test")
+       await client.drop_database(settings.TEST_DATABASE_NAME)
 
 @pytest.fixture(scope="module")
 async def setup_two_user():
