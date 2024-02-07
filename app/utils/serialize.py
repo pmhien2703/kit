@@ -19,6 +19,8 @@ def serialize_dict(doc) -> dict | None:
         serialized = doc  # Pass through other types as-is
     return serialized
 
-async def serialize_list(cursor: AsyncIOMotorCursor) -> list:
+async def serialize_list(cursor: AsyncIOMotorCursor) -> list | None:
     docs = await cursor.to_list(None)
+    if(len(docs) == 0):
+        return None
     return [serialize_dict(doc) for doc in docs]
