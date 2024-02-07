@@ -1,5 +1,7 @@
 import bson
-def serialize_dict(doc) -> dict:
+from motor.motor_asyncio import AsyncIOMotorCursor
+def serialize_dict(doc) -> dict | None:
+    #TODO cuong will handle None later
     if isinstance(doc, dict):
         serialized = {
             "_id": str(doc["_id"]),  # Convert ObjectId to string (assuming it's in the root dict)
@@ -17,5 +19,6 @@ def serialize_dict(doc) -> dict:
         serialized = doc  # Pass through other types as-is
     return serialized
 
-def serialize_list(list_doc) -> list:
-  return [serialize_dict(doc) for doc in list_doc]
+async def serialize_list(cursor: AsyncIOMotorCursor) -> list:
+    docs = await cursor.to_list(None)
+    return [serialize_dict(doc) for doc in docs]
