@@ -2,23 +2,23 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi.testclient import TestClient
 import pytest
 from app.config.mongodb import get_db
-from app.config.settings import Settings
+from app.config.settings import TestSettings
 from app.main import app
 from app.models.users import UserModel
 from app.repositories.user import UserRepository
 
 client = TestClient(app)
-settings = Settings()
-uri = settings.MONGODB_CONNECT_STRING
+settings = TestSettings()
+uri = settings.TEST_MONGODB_CONNECT_STRING
 user_test: UserModel = UserModel(username="test", password="test",fullname="test", email="email@gmail.com", avatar="avatar")
 
 def override_get_db():
-    db_client = AsyncIOMotorClient()
-    db = db_client["kit_test"]
+    db_client = AsyncIOMotorClient(uri)
+    db = db_client[settings.TEST_DATABASE_NAME]
     try:
         yield db
     finally:
-        client.close()
+        db_client.close()
 
 app.dependency_overrides[get_db] = override_get_db
 
@@ -34,9 +34,9 @@ async def setup_one_user():
     result = await collection.insert_one(user.model_dump())
 
     try:
-        yield (collection, result.inserted_id)
+       yield (collection, result.inserted_id)
     finally:
-        await client.drop_database("kit_test")
+       await client.drop_database("kit_test")
 
 @pytest.fixture(scope="module")
 async def setup_two_user():
@@ -103,8 +103,9 @@ async def test_user_update(setup_one_user) -> None:
         user.email = "changeemail@gmail.com"
         user.fullname = "changefullname"
         user.password = "changepassword"
-        await repo.update(user)
         #Act
+        await repo.update(user_id, user)
+        
         doc = await repo.get_by_id(user_id)
         user = UserModel(**doc)
         #Assert
@@ -115,7 +116,7 @@ async def test_user_update(setup_one_user) -> None:
         assert user.password == "changepassword"
 
 @pytest.mark.asyncio
-async def test_get_user_by_id(setup_one_user) -> None:
+async def test_user_remove(setup_one_user) -> None:
     #Arrange
     async for collection_test, user_id in setup_one_user:
         repo = UserRepository(collection_test)
